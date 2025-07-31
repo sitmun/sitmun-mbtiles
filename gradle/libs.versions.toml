@@ -6,10 +6,7 @@ spring-dependency-management = "1.1.7"
 # Plugin versions
 lombok = "8.6"
 spotless = "7.2.0"
-owasp-dependency-check = "8.4.3"
 axion-release = "1.17.0"
-git-properties = "2.5.2"
-grgit = "5.2.0"
 
 # Dependency versions
 h2 = "2.2.224"
@@ -37,8 +34,5 @@ spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
 lombok = { id = "io.freefair.lombok", version.ref = "lombok" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
-owasp-dependency-check = { id = "org.owasp.dependencycheck", version.ref = "owasp-dependency-check" }
 axion-release = { id = "pl.allegro.tech.build.axion-release", version.ref = "axion-release" }
-git-properties = { id = "com.gorylenko.gradle-git-properties", version.ref = "git-properties" }
-grgit = { id = "org.ajoberstar.grgit", version.ref = "grgit" }
 

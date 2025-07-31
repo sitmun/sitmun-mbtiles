@@ -5,10 +5,7 @@ plugins {
     alias(libs.plugins.spring.dependency.management)
     alias(libs.plugins.lombok)
     alias(libs.plugins.spotless)
-    alias(libs.plugins.owasp.dependency.check)
     alias(libs.plugins.axion.release)
-    alias(libs.plugins.git.properties)
-    alias(libs.plugins.grgit)
 }
 
 group = 'org.sitmun'
@@ -83,22 +80,8 @@ scmVersion {
     versionIncrementer 'incrementPatch'
 }
 
-// Dependency vulnerability scanning
-dependencyCheck {
-    formats = ['HTML', 'JSON']
-    failBuildOnCVSS = 7
-    skipConfigurations = ['spotless*']
-}
-
-// Git properties configuration
-gitProperties {
-    dateFormat = "yyyy-MM-dd HH:mm:ss"
-    dateFormatTimeZone = "UTC"
-    keys = ['git.branch', 'git.commit.id', 'git.commit.time', 'git.commit.message.short']
-}
-
 // Git hooks setup
-task setupGitHooks {
+tasks.register('setupGitHooks') {
     group = 'git hooks'
     description = 'Install Git hooks for commit message validation and pre-commit checks'
     def hookDir = new File(project.rootDir, '.git/hooks')
@@ -107,7 +90,7 @@ task setupGitHooks {
 
     doLast {
         hookDir.mkdirs()
-        
+
         // Pre-commit hook
         preCommitHook.text = '''#!/bin/sh
             echo "🔍 Running pre-commit checks..."
@@ -139,7 +122,7 @@ task setupGitHooks {
             echo "✅ All pre-commit checks passed!"
         '''.stripIndent()
         preCommitHook.setExecutable(true)
-        
+
         // Commit message hook
         commitMsgHook.text = '''#!/bin/sh
             commit_msg=$(cat $1)
@@ -181,9 +164,8 @@ task setupGitHooks {
             echo "✅ Commit message format is valid!"
         '''.stripIndent()
         commitMsgHook.setExecutable(true)
-        
 
-        
+
         println "✅ Git hooks installed successfully!"
         println "📋 Pre-commit hook: Runs tests, formatting, and security checks"
         println "📝 Commit-msg hook: Validates conventional commit message format"
@@ -197,7 +179,7 @@ task setupGitHooks {
 }
 
 // Task to remove Git hooks
-task removeGitHooks {
+tasks.register('removeGitHooks') {
     group = 'git hooks'
     description = 'Remove Git hooks'
     def hookDir = new File(project.rootDir, '.git/hooks')

@@ -1,0 +1,44 @@
+[versions]
+# Spring Boot and related versions
+spring-boot = "3.5.4"
+spring-dependency-management = "1.1.7"
+
+# Plugin versions
+lombok = "8.6"
+spotless = "7.2.0"
+owasp-dependency-check = "8.4.3"
+axion-release = "1.17.0"
+git-properties = "2.5.2"
+grgit = "5.2.0"
+
+# Dependency versions
+h2 = "2.2.224"
+jetbrains-annotations = "24.1.0"
+mbtiles4j = "1.2.0"
+proj4j = "1.1.5"
+dom4j = "2.1.4"
+
+[libraries]
+spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-boot-starter-batch = { group = "org.springframework.boot", name = "spring-boot-starter-batch" }
+spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
+spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+spring-boot-devtools = { group = "org.springframework.boot", name = "spring-boot-devtools" }
+spring-boot-configuration-processor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
+h2 = { group = "com.h2database", name = "h2", version.ref = "h2" }
+jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrains-annotations" }
+lombok = { group = "org.projectlombok", name = "lombok" }
+mbtiles4j = { group = "ch.poole.geo", name = "mbtiles4j", version.ref = "mbtiles4j" }
+proj4j = { group = "org.locationtech.proj4j", name = "proj4j", version.ref = "proj4j" }
+dom4j = { group = "org.dom4j", name = "dom4j", version.ref = "dom4j" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+lombok = { id = "io.freefair.lombok", version.ref = "lombok" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+owasp-dependency-check = { id = "org.owasp.dependencycheck", version.ref = "owasp-dependency-check" }
+axion-release = { id = "pl.allegro.tech.build.axion-release", version.ref = "axion-release" }
+git-properties = { id = "com.gorylenko.gradle-git-properties", version.ref = "git-properties" }
+grgit = { id = "org.ajoberstar.grgit", version.ref = "grgit" }
+

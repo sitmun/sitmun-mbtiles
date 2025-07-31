@@ -1,0 +1,24 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
+  # H2 Database Configuration
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  # H2 Console Configuration
+  h2:
+    console:
+      enabled: false
+
+  # Spring Batch Configuration
+  batch:
+    job:
+        enabled: false
+    jdbc:
+      initialize-schema: always
+      platform: h2
+

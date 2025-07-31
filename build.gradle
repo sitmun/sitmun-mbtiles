@@ -1,0 +1,220 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
+    alias(libs.plugins.lombok)
+    alias(libs.plugins.spotless)
+    alias(libs.plugins.owasp.dependency.check)
+    alias(libs.plugins.axion.release)
+    alias(libs.plugins.git.properties)
+    alias(libs.plugins.grgit)
+}
+
+group = 'org.sitmun'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation libs.spring.boot.starter.batch
+    implementation libs.spring.boot.starter.web
+    implementation libs.spring.boot.starter.data.jpa
+
+    // MBTiles Support
+    implementation libs.mbtiles4j
+
+    // Coordinate System Transformations
+    implementation libs.proj4j
+
+    // XML Parsing
+    implementation libs.dom4j
+
+    // Database
+    runtimeOnly libs.h2
+
+    // IntelliJ IDEA Annotations
+    compileOnly libs.jetbrains.annotations
+
+    // Development tools
+    developmentOnly libs.spring.boot.devtools
+    
+    // Testing
+    testImplementation libs.spring.boot.starter.test
+
+    // Annotation processing
+    annotationProcessor libs.spring.boot.configuration.processor
+    annotationProcessor libs.lombok
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// Spotless configuration
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}
+
+// JaCoCo configuration
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+
+// Axion Release Plugin Configuration
+scmVersion {
+    tag {
+        prefix = 'v'
+    }
+    versionCreator { version, position -> 
+        "${version}-${position.commit}-${position.branch}"
+    }
+    versionIncrementer 'incrementPatch'
+}
+
+// Dependency vulnerability scanning
+dependencyCheck {
+    formats = ['HTML', 'JSON']
+    failBuildOnCVSS = 7
+    skipConfigurations = ['spotless*']
+}
+
+// Git properties configuration
+gitProperties {
+    dateFormat = "yyyy-MM-dd HH:mm:ss"
+    dateFormatTimeZone = "UTC"
+    keys = ['git.branch', 'git.commit.id', 'git.commit.time', 'git.commit.message.short']
+}
+
+// Git hooks setup
+task setupGitHooks {
+    group = 'git hooks'
+    description = 'Install Git hooks for commit message validation and pre-commit checks'
+    def hookDir = new File(project.rootDir, '.git/hooks')
+    def commitMsgHook = new File(hookDir, 'commit-msg')
+    def preCommitHook = new File(hookDir, 'pre-commit')
+
+    doLast {
+        hookDir.mkdirs()
+        
+        // Pre-commit hook
+        preCommitHook.text = '''#!/bin/sh
+            echo "🔍 Running pre-commit checks..."
+            
+            # Code formatting check
+            echo "  📝 Checking code formatting..."
+            ./gradlew spotlessCheck
+            if [ $? -ne 0 ]; then
+                echo "❌ Code formatting check failed. Run './gradlew spotlessApply' to fix."
+                exit 1
+            fi
+            
+            # Tests
+            echo "  🧪 Running tests..."
+            ./gradlew test
+            if [ $? -ne 0 ]; then
+                echo "❌ Tests failed. Please fix the failing tests."
+                exit 1
+            fi
+            
+            # Code coverage check
+            echo "  📊 Checking code coverage..."
+            ./gradlew jacocoTestReport
+            if [ $? -ne 0 ]; then
+                echo "❌ Code coverage check failed."
+                exit 1
+            fi
+            
+            echo "✅ All pre-commit checks passed!"
+        '''.stripIndent()
+        preCommitHook.setExecutable(true)
+        
+        // Commit message hook
+        commitMsgHook.text = '''#!/bin/sh
+            commit_msg=$(cat $1)
+            
+            # Conventional commit pattern for SITMUN MBTiles
+            pattern="^(feat|fix|docs|style|refactor|test|chore|perf|ci|build)(\\(mbtiles\\))?: .+"
+            
+            if ! echo "$commit_msg" | grep -qE "$pattern"; then
+                echo "❌ Invalid commit message format."
+                echo ""
+                echo "Expected: <type>(mbtiles): <description>"
+                echo ""
+                echo "Types:"
+                echo "  feat     - New feature"
+                echo "  fix      - Bug fix"
+                echo "  docs     - Documentation changes"
+                echo "  style    - Code style changes"
+                echo "  refactor - Code refactoring"
+                echo "  test     - Test changes"
+                echo "  chore    - Maintenance tasks"
+                echo "  perf     - Performance improvements"
+                echo "  ci       - CI/CD changes"
+                echo "  build    - Build system changes"
+                echo ""
+                echo "Examples:"
+                echo "  feat(mbtiles): add tile merging functionality"
+                echo "  fix(mbtiles): resolve memory leak in tile processing"
+                echo "  docs: update README with MBTiles compliance info"
+                echo "  test: add integration tests for WMTS harvesting"
+                echo "  style: format code with Google Java Format"
+                echo "  refactor: improve tile coordinate calculation"
+                echo "  chore: update dependencies to latest versions"
+                echo "  perf: optimize tile processing performance"
+                echo "  ci: add GitHub Actions workflow"
+                echo "  build: update Gradle configuration"
+                exit 1
+            fi
+            
+            echo "✅ Commit message format is valid!"
+        '''.stripIndent()
+        commitMsgHook.setExecutable(true)
+        
+
+        
+        println "✅ Git hooks installed successfully!"
+        println "📋 Pre-commit hook: Runs tests, formatting, and security checks"
+        println "📝 Commit-msg hook: Validates conventional commit message format"
+        println ""
+        println "💡 Usage examples:"
+        println "  git commit -m \"feat: add tile merging functionality\""
+        println "  git commit -m \"fix: resolve memory leak\""
+        println "  git commit -m \"docs: update README\""
+        println "  git commit -m \"test: add integration tests\""
+    }
+}
+
+// Task to remove Git hooks
+task removeGitHooks {
+    group = 'git hooks'
+    description = 'Remove Git hooks'
+    def hookDir = new File(project.rootDir, '.git/hooks')
+
+    doLast {
+        ['pre-commit', 'commit-msg'].each { hookName ->
+            def hookFile = new File(hookDir, hookName)
+            if (hookFile.exists()) {
+                hookFile.delete()
+                println "🗑️  Removed ${hookName} hook"
+            }
+        }
+        println "✅ Git hooks removed successfully!"
+    }
+}
+
+// Make setupGitHooks available as a dependency for build
+tasks.named('build') {
+    dependsOn 'setupGitHooks'
+}

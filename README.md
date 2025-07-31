@@ -5,6 +5,7 @@ A Spring Boot microservice for generating MBTiles (MapBox Tiles) from WMTS map s
 ## Overview
 
 The SITMUN MBTiles Service provides REST API endpoints to:
+
 - Generate MBTiles files from WMTS map services
 - Estimate tile generation size and requirements
 - Monitor job progress and status
@@ -22,11 +23,12 @@ This service integrates with the [SITMUN Backend Core](https://github.com/sitmun
 - **Coordinate Transformations**: proj4j 1.1.5
 - **XML Parsing**: dom4j 2.1.4
 - **Testing**: JUnit 5, Spring Boot Test
-- **Code Quality**: Spotless, JaCoCo, OWASP Dependency Check
+- **Code Quality**: Spotless, JaCoCo
 
 ## Features
 
 ### Core Functionality
+
 - **WMTS Tile Harvesting**: Download tiles from WMTS map services
 - **MBTiles Generation**: Create standardized MBTiles format files
 - **Coordinate System Support**: Handle various SRS/CRS transformations with EPSG:3857 output
@@ -36,33 +38,37 @@ This service integrates with the [SITMUN Backend Core](https://github.com/sitmun
 
 ### API Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/mbtiles` | POST | Start MBTiles generation job |
-| `/mbtiles/estimate` | POST | Estimate tile generation requirements |
-| `/mbtiles/{jobId}` | GET | Get job status and progress |
-| `/mbtiles/{jobId}/file` | GET | Download completed MBTiles file |
+| Endpoint                | Method | Description                           |
+|-------------------------|--------|---------------------------------------|
+| `/mbtiles`              | POST   | Start MBTiles generation job          |
+| `/mbtiles/estimate`     | POST   | Estimate tile generation requirements |
+| `/mbtiles/{jobId}`      | GET    | Get job status and progress           |
+| `/mbtiles/{jobId}/file` | GET    | Download completed MBTiles file       |
 
 ## Quick Start
 
 ### Prerequisites
+
 - Java 17 or later
 - Gradle (wrapper included)
 
 ### Local Development
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/sitmun/sitmun-mbtiles.git
    cd sitmun-mbtiles
    ```
 
 2. **Run the application**
+
    ```bash
    ./gradlew bootRun
    ```
 
 3. **Verify the service is running**
+
    ```bash
    curl http://localhost:8080/mbtiles
    ```
@@ -159,21 +165,23 @@ curl -O -J http://localhost:8080/mbtiles/123/file
 ## Data Models
 
 ### TileRequestDto
-```java
+
+```
 {
   "mapServices": [MapServiceDto],  // List of map services
-  "minLat": double,               // Minimum latitude (EPSG:4326)
-  "minLon": double,               // Minimum longitude (EPSG:4326)
-  "maxLat": double,               // Maximum latitude (EPSG:4326)
-  "maxLon": double,               // Maximum longitude (EPSG:4326)
-  "minZoom": int,                 // Minimum zoom level
-  "maxZoom": int,                 // Maximum zoom level
-  "srs": String                   // Spatial reference system
+  "minLat": double,                // Minimum latitude (EPSG:4326)
+  "minLon": double,                // Minimum longitude (EPSG:4326)
+  "maxLat": double,                // Maximum latitude (EPSG:4326)
+  "maxLon": double,                // Maximum longitude (EPSG:4326)
+  "minZoom": int,                  // Minimum zoom level
+  "maxZoom": int,                  // Maximum zoom level
+  "srs": String                    // Spatial reference system
 }
 ```
 
 ### MapServiceDto
-```java
+
+```
 {
   "url": String,      // WMTS service URL
   "layers": [String], // Layer names to harvest
@@ -221,6 +229,7 @@ Controllers → Services → Jobs → Process → MBTiles Writer/Reader
 - **WMTS Utils**: WMTS capabilities parsing and coordinate transformations
 
 ### Processing Flow
+
 1. **WMTS Capabilities Parsing**: Extract layer information and tile matrix sets
 2. **Coordinate Calculation**: Convert geographic bounds to tile coordinates
 3. **Tile Download**: Fetch tiles from WMTS services
@@ -258,7 +267,6 @@ The project includes several code quality tools:
 
 - **Spotless**: Code formatting with Google Java Format
 - **JaCoCo**: Code coverage reporting
-- **OWASP Dependency Check**: Security vulnerability scanning
 - **Axion Release**: Version management
 
 ### Running Quality Checks
@@ -287,15 +295,15 @@ The project includes Git hooks for automated quality checks:
 ```
 
 **Pre-commit checks**:
+
 - Code formatting validation
 - Unit and integration tests
 - Code coverage verification
 
 **Commit message validation**:
+
 - Conventional commit format enforcement
 - SITMUN-specific scope support `(mbtiles)`
-
-See [GIT_HOOKS.md](GIT_HOOKS.md) for detailed documentation.
 
 ## Testing
 
@@ -326,6 +334,7 @@ This project uses the following license: [European Union Public License V. 1.2](
 ## Support
 
 For questions and support:
+
 - Open an issue on GitHub
 - Check the [SITMUN documentation](https://sitmun.github.io/)
 - Join the SITMUN community discussions 

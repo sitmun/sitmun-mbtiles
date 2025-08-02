@@ -3,22 +3,16 @@ package org.sitmun.mbtiles.dto;
 import java.util.List;
 import lombok.*;
 
+@Value
 @Builder
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@With
 public class TileServiceDto {
 
-  private String url;
-  private List<String> layers;
-  private String type;
-  private double minLat;
-  private double minLon;
-  private double maxLat;
-  private double maxLon;
-  private int minZoom;
-  private int maxZoom;
-  private String srs;
-  private String matrixSet;
+  String url;
+  List<String> layers;
+  String type;
+  BoundingBoxDto bbox;
+  int minZoom;
+  int maxZoom;
+  String matrixSet;
 }

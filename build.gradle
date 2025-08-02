@@ -24,6 +24,9 @@ dependencies {
     implementation libs.spring.boot.starter.batch
     implementation libs.spring.boot.starter.web
     implementation libs.spring.boot.starter.data.jpa
+    implementation libs.spring.boot.starter.validation
+    implementation libs.spring.boot.starter.actuator
+    implementation libs.hibernate.validator
 
     // MBTiles Support
     implementation libs.mbtiles4j
@@ -40,8 +43,11 @@ dependencies {
     // IntelliJ IDEA Annotations
     compileOnly libs.jetbrains.annotations
 
-    // Development tools
+    // Development tools (excluded from production builds)
     developmentOnly libs.spring.boot.devtools
+    
+    // Monitoring and Management
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     
     // Testing
     testImplementation libs.spring.boot.starter.test
@@ -51,7 +57,7 @@ dependencies {
     annotationProcessor libs.lombok
 }
 
-tasks.named('test') {
+tasks.named('test', Test) {
     useJUnitPlatform()
 }
 

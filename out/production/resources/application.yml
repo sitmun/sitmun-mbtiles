@@ -28,30 +28,4 @@ mbtiles:
     corePoolSize: 2      # Core thread pool size
     maxPoolSize: 4       # Maximum thread pool size
     queueCapacity: 10    # Queue capacity for tasks
-  
-  # Temporary File Configuration
-  temp:
-    directory: ${java.io.tmpdir}  # Temporary directory path
-    cleanup:
-      enabled: true               # Enable automatic cleanup
-      cron: "0 0 2 * * *"        # Cron expression for cleanup (every day at 2 AM)
-
-# Server Configuration (default - can be overridden by profiles)
-server:
-  shutdown: graceful    # Enable graceful shutdown
-
-# Actuator Configuration
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health
-      base-path: /actuator
-  endpoint:
-    health:
-      show-details: never
-      show-components: never
-  health:
-    defaults:
-      enabled: true
 

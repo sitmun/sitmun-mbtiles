@@ -34,5 +34,5 @@ If applicable, add screenshots to help explain your problem.
  - Browser [e.g. stock browser, safari]
  - Version [e.g. 22]
 
-**Additional taskContext**
-Add any other taskContext about the problem here.
+**Additional MBTilesTaskContext**
+Add any other MBTilesTaskContext about the problem here.

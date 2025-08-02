@@ -11,9 +11,12 @@ public class MBTilesProgressService {
   private final Map<Long, MBTilesProgressDto> jobProgress = new ConcurrentHashMap<>();
 
   public void updateJobProgress(long jobId, long totalTiles, long processedTiles) {
-    MBTilesProgressDto progress =
-        jobProgress.computeIfAbsent(jobId, k -> new MBTilesProgressDto(totalTiles, 0));
-    progress.setProcessedTiles(processedTiles);
+    synchronized (jobProgress) {
+      MBTilesProgressDto progress =
+          jobProgress.getOrDefault(
+              jobId, MBTilesProgressDto.builder().totalTiles(totalTiles).processedTiles(0).build());
+      jobProgress.put(jobId, progress.withProcessedTiles(processedTiles));
+    }
   }
 
   public MBTilesProgressDto getJobProgress(long jobId) {

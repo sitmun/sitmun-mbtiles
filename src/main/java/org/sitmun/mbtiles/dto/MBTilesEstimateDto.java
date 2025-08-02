@@ -2,13 +2,11 @@ package org.sitmun.mbtiles.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Value
 @Builder
+@With
 public class MBTilesEstimateDto {
-  private int tileCount;
-  private double estimatedTileSizeKb;
-  private double estimatedMbtilesSizeMb;
+  int tileCount;
+  double estimatedTileSizeKb;
+  double estimatedMbtilesSizeMb;
 }

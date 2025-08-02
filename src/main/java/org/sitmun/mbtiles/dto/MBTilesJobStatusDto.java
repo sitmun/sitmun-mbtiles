@@ -1,17 +1,13 @@
 package org.sitmun.mbtiles.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Value
+@Builder
+@With
 public class MBTilesJobStatusDto {
-  private String status;
-  private Long processedTiles;
-  private Long totalTiles;
-  private String errorMessage;
+  String status;
+  long processedTiles;
+  long totalTiles;
+  String errorMessage;
 }

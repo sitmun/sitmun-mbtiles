@@ -1,0 +1,134 @@
+{
+  "groups": [
+    {
+      "name": "mbtiles"
+    },
+    {
+      "name": "mbtiles.job",
+      "type": "org.sitmun.mbtiles.config.JobConfiguration",
+      "sourceType": "org.sitmun.mbtiles.config.JobConfiguration"
+    },
+    {
+      "name": "mbtiles.temp",
+      "type": "org.sitmun.mbtiles.config.TemporaryFileConfiguration",
+      "sourceType": "org.sitmun.mbtiles.config.TemporaryFileConfiguration"
+    }
+  ],
+  "properties": [
+    {
+      "name": "mbtiles.job.core-pool-size",
+      "type": "java.lang.Integer",
+      "description": "Core thread pool size for MBTiles job processing.",
+      "sourceType": "org.sitmun.mbtiles.config.JobConfiguration",
+      "defaultValue": 2
+    },
+    {
+      "name": "mbtiles.job.max-pool-size",
+      "type": "java.lang.Integer",
+      "description": "Maximum thread pool size for MBTiles job processing.",
+      "sourceType": "org.sitmun.mbtiles.config.JobConfiguration",
+      "defaultValue": 4
+    },
+    {
+      "name": "mbtiles.job.queue-capacity",
+      "type": "java.lang.Integer",
+      "description": "Queue capacity for MBTiles job tasks.",
+      "sourceType": "org.sitmun.mbtiles.config.JobConfiguration",
+      "defaultValue": 10
+    },
+    {
+      "name": "mbtiles.temp.directory",
+      "type": "java.lang.String",
+      "description": "Directory path for temporary files used during MBTiles processing.",
+      "sourceType": "org.sitmun.mbtiles.config.TemporaryFileConfiguration",
+      "defaultValue": "${java.io.tmpdir}"
+    },
+    {
+      "name": "mbtiles.temp.cleanup.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable automatic cleanup of temporary files.",
+      "sourceType": "org.sitmun.mbtiles.config.TemporaryFileConfiguration",
+      "defaultValue": true
+    },
+    {
+      "name": "mbtiles.temp.cleanup.cron",
+      "type": "java.lang.String",
+      "description": "Cron expression for scheduling temporary file cleanup.",
+      "sourceType": "org.sitmun.mbtiles.config.TemporaryFileConfiguration",
+      "defaultValue": "0 0 2 * * *"
+    }
+  ],
+  "hints": [
+    {
+      "name": "mbtiles.temp.cleanup.cron",
+      "values": [
+        {
+          "value": "0 0 2 * * *",
+          "description": "Every day at 2 AM (default)."
+        },
+        {
+          "value": "0 0 0 * * *",
+          "description": "Every day at midnight."
+        },
+        {
+          "value": "0 0 3 * * *",
+          "description": "Every day at 3 AM."
+        },
+        {
+          "value": "0 0 2 * * 0",
+          "description": "Every Sunday at 2 AM."
+        },
+        {
+          "value": "0 */5 * * * *",
+          "description": "Every 5 minutes."
+        },
+        {
+          "value": "0 0 * * * *",
+          "description": "Every hour."
+        }
+      ]
+    },
+    {
+      "name": "mbtiles.job.core-pool-size",
+      "values": [
+        {
+          "value": 1,
+          "description": "Single thread (minimal resource usage)."
+        },
+        {
+          "value": 2,
+          "description": "Two threads (default, balanced)."
+        },
+        {
+          "value": 4,
+          "description": "Four threads (higher performance)."
+        },
+        {
+          "value": 8,
+          "description": "Eight threads (high performance, more resources)."
+        }
+      ]
+    },
+    {
+      "name": "mbtiles.job.max-pool-size",
+      "values": [
+        {
+          "value": 2,
+          "description": "Two threads (minimal)."
+        },
+        {
+          "value": 4,
+          "description": "Four threads (default)."
+        },
+        {
+          "value": 8,
+          "description": "Eight threads (high performance)."
+        },
+        {
+          "value": 16,
+          "description": "Sixteen threads (maximum performance)."
+        }
+      ]
+    }
+  ]
+} 

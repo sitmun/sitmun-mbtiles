@@ -2,7 +2,7 @@ package org.sitmun.mbtiles.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.sitmun.mbtiles.jobs.MBTilesTask;
+import org.sitmun.mbtiles.batch.MBTilesTask;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.BatchConfigurationException;
@@ -24,13 +24,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Slf4j
 public class JobConfiguration {
 
-  @Value("${spring.batch.job.corePoolSize:2}")
+  @Value("${mbtiles.job.corePoolSize:2}")
   int corePoolSize;
 
-  @Value("${spring.batch.job.maxPoolSize:4}")
+  @Value("${mbtiles.job.maxPoolSize:4}")
   int maxPoolSize;
 
-  @Value("${spring.batch.job.queueCapacity:10}")
+  @Value("${mbtiles.job.queueCapacity:10}")
   int queueCapacity;
 
   @Bean

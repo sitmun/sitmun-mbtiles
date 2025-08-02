@@ -1,14 +1,12 @@
 package org.sitmun.mbtiles.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Value
+@Builder
+@With
 public class MBTilesProgressDto {
 
-  private long totalTiles;
-  private long processedTiles;
+  long totalTiles;
+  long processedTiles;
 }

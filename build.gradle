@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.axion.release)
 }
 
+//version = scmVersion.version
 group = 'org.sitmun'
 
 java {
@@ -77,14 +78,16 @@ jacocoTestReport {
 
 // Axion Release Plugin Configuration
 scmVersion {
+    ignoreUncommittedChanges.set(true)
     tag {
-        prefix = 'v'
+        prefix = 'sitmun-mbtiles'
+        versionSeparator = '/'
+        initialVersion({config, position -> '1.0.0'})
     }
-    versionCreator { version, position -> 
-        "${version}-${position.commit}-${position.branch}"
-    }
-    versionIncrementer 'incrementPatch'
+    versionIncrementer('incrementPatch')
 }
+
+project.version = scmVersion.version
 
 // Git hooks setup
 tasks.register('setupGitHooks') {

@@ -6,7 +6,7 @@ spring-dependency-management = "1.1.7"
 # Plugin versions
 lombok = "8.6"
 spotless = "7.2.0"
-axion-release = "1.17.0"
+axion-release = "1.19.0"
 
 # Dependency versions
 h2 = "2.2.224"

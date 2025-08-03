@@ -1,10 +1,12 @@
 package org.sitmun.mbtiles.controllers;
 
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sitmun.mbtiles.dto.BoundingBoxDto;
@@ -30,7 +32,7 @@ class GlobalExceptionHandlerTest {
     // Given - Invalid request with null map services
     TileRequestDto invalidRequest =
         TileRequestDto.builder()
-            .mapServices(null) // This will cause validation error
+            .mapServices(null) // This will cause a validation error
             .bbox(
                 BoundingBoxDto.builder()
                     .minX(-3.0)
@@ -90,9 +92,7 @@ class GlobalExceptionHandlerTest {
         .andExpect(jsonPath("$.detail").value("Request validation failed"))
         .andExpect(jsonPath("$.status").value(400))
         .andExpect(jsonPath("$.errors").isArray())
-        .andExpect(
-            jsonPath("$.errors")
-                .value(org.hamcrest.Matchers.hasSize(org.hamcrest.Matchers.greaterThan(1))));
+        .andExpect(jsonPath("$.errors").value(hasSize(Matchers.greaterThan(1))));
   }
 
   @Test
@@ -173,6 +173,10 @@ class GlobalExceptionHandlerTest {
         .andExpect(jsonPath("$.status").value(400))
         .andExpect(jsonPath("$.errors").isArray())
         .andExpect(
-            jsonPath("$.errors[0]").value("mapServices[0].layers: Layers list cannot be null"));
+            jsonPath("$.errors")
+                .value(
+                    containsInAnyOrder(
+                        "mapServices[0].layers: Layers list cannot be null",
+                        "mapServices[0].layers: At least one layer must be specified")));
   }
 }

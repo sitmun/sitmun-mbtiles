@@ -279,18 +279,18 @@ curl -O -J http://localhost:8080/mbtiles/123/file
 
 #### TileRequestDto
 
-```json
+```
 {
-  "mapServices": [MapServiceDto],  // Required, non-empty list
-  "bbox": BoundingBoxDto,          // Required, valid coordinates
-  "minZoom": int,                  // Required, min 0, must be ≤ maxZoom
-  "maxZoom": int                   // Required, min 0, must be ≥ minZoom
+  "mapServices": [MapServiceDto],
+  "bbox": BoundingBoxDto,
+  "minZoom": int,
+  "maxZoom": int
 }
 ```
 
 #### BoundingBoxDto
 
-```json
+```
 {
   "minX": double,    // Required, must be ≤ maxX
   "minY": double,    // Required, must be ≤ maxY
@@ -302,7 +302,7 @@ curl -O -J http://localhost:8080/mbtiles/123/file
 
 #### MapServiceDto
 
-```json
+```
 {
   "url": String,      // Required, valid HTTP/HTTPS URL
   "layers": [String], // Required, non-empty list
@@ -312,7 +312,7 @@ curl -O -J http://localhost:8080/mbtiles/123/file
 
 #### MBTilesEstimateDto
 
-```json
+```
 {
   "tileCount": int,              // Total number of tiles
   "estimatedTileSizeKb": double, // Average tile size in KB
@@ -322,7 +322,7 @@ curl -O -J http://localhost:8080/mbtiles/123/file
 
 #### MBTilesJobStatusDto
 
-```json
+```
 {
   "status": String,        // Job status (STARTED, RUNNING, COMPLETED, FAILED)
   "processedTiles": long,  // Number of processed tiles

@@ -266,6 +266,7 @@ class MBTilesControllerIntegrationTest {
 
   private void stopExecution(Long jobId) {
     try {
+      awaitStarted(jobId);
       log.info("Attempting to stop job {}", jobId);
       assertTrue(jobOperator.stop(jobId));
       awaitStoppingStoppedCompletedFailed(jobId);

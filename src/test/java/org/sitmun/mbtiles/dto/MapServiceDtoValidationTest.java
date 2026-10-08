@@ -8,6 +8,7 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -180,12 +181,11 @@ class MapServiceDtoValidationTest {
   }
 
   @Test
-  @DisplayName("Debug URL validation with various formats")
-  void debugUrlValidation() {
-    // Debug test to see what URLs are actually accepted/rejected
-    String[] testUrls = {
-      "not-a-url",
-      "ftp://example.com",
+  @DisplayName("Edge-case service URLs produce the expected violations")
+  void edgeCaseUrls_shouldMatchExpectedViolations() {
+    String urlMessage = "Service URL must be a valid HTTP/HTTPS URL";
+    String[] rejected = {"not-a-url", "ftp://example.com"};
+    String[] accepted = {
       "http://example.com",
       "https://example.com",
       "http://",
@@ -197,15 +197,19 @@ class MapServiceDtoValidationTest {
       "https://-example.com",
     };
 
-    for (String testUrl : testUrls) {
-      MapServiceDto mapService =
-          MapServiceDto.builder().url(testUrl).layers(List.of("layer1")).type("WMTS").build();
-
-      Set<ConstraintViolation<MapServiceDto>> violations = validator.validate(mapService);
-
-      if (!violations.isEmpty()) {
-        violations.forEach(v -> System.out.println("  Error: " + v.getMessage()));
-      }
+    for (String url : rejected) {
+      assertEquals(Set.of(urlMessage), violationMessages(url), url);
     }
+    for (String url : accepted) {
+      assertEquals(Set.of(), violationMessages(url), url);
+    }
+  }
+
+  private static Set<String> violationMessages(String url) {
+    MapServiceDto mapService =
+        MapServiceDto.builder().url(url).layers(List.of("layer1")).type("WMTS").build();
+    return validator.validate(mapService).stream()
+        .map(ConstraintViolation::getMessage)
+        .collect(Collectors.toSet());
   }
 }

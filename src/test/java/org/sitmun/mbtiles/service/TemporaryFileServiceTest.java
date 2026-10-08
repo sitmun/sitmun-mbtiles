@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
+import java.time.Duration;
+import java.time.Instant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -56,18 +59,15 @@ class TemporaryFileServiceTest {
 
   @Test
   void shouldRespectCleanupEnabledFlag() throws IOException {
-    // Create a temp file to test cleanup
     Path tempFile = service.createUniqueTempFile("test");
+    Files.setLastModifiedTime(tempFile, FileTime.from(Instant.now().minus(Duration.ofHours(25))));
     assertTrue(Files.exists(tempFile));
 
-    // Test with cleanup disabled
     ReflectionTestUtils.setField(config, "cleanupEnabled", false);
     service.cleanupOldTempFiles();
 
-    // File should still exist since cleanup is disabled
     assertTrue(Files.exists(tempFile));
 
-    // Clean up manually
     service.deleteTempFile(tempFile);
   }
 }

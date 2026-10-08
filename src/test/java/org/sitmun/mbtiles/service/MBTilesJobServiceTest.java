@@ -98,7 +98,7 @@ class MBTilesJobServiceTest {
     MBTilesJobStatusDto response = mbTilesJobService.getJobStatus(jobId);
     assertThat(response.getStatus()).isEqualTo("STARTED");
 
-    // Test RUNNING status
+    // Test STARTING status
     when(jobExecution.getStatus()).thenReturn(BatchStatus.STARTING);
     response = mbTilesJobService.getJobStatus(jobId);
     assertThat(response.getStatus()).isEqualTo("STARTING");

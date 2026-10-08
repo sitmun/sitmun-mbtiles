@@ -74,14 +74,12 @@ class MBTilesJobServiceTest {
   @Test
   @DisplayName("Should wrap a launcher failure")
   void handleLauncherFailure() throws Exception {
-    // Given
     TileRequestDto tileRequest = createSampleTileRequest();
     Path mockTempFile = Path.of("/tmp/test-file.mbtiles");
     when(temporaryFileService.createUniqueTempFile("mbtiles")).thenReturn(mockTempFile);
     when(jobLauncher.run(eq(mbTilesJob), any(JobParameters.class)))
         .thenThrow(new IllegalArgumentException("launcher failed"));
 
-    // When/Then
     assertThatThrownBy(() -> mbTilesJobService.startJob(tileRequest))
         .isInstanceOf(MBTilesUnexpectedInternalException.class);
   }

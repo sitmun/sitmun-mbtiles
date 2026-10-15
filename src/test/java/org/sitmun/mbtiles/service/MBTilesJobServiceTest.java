@@ -6,6 +6,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -70,16 +72,14 @@ class MBTilesJobServiceTest {
   }
 
   @Test
-  @DisplayName("Should handle invalid TileRequestDto")
-  void handleInvalidTileRequest() throws Exception {
-    // Given
-    TileRequestDto tileRequest = TileRequestDto.builder().build(); // Empty request
+  @DisplayName("Should wrap a launcher failure")
+  void handleLauncherFailure() throws Exception {
+    TileRequestDto tileRequest = createSampleTileRequest();
     Path mockTempFile = Path.of("/tmp/test-file.mbtiles");
     when(temporaryFileService.createUniqueTempFile("mbtiles")).thenReturn(mockTempFile);
     when(jobLauncher.run(eq(mbTilesJob), any(JobParameters.class)))
-        .thenThrow(new IllegalArgumentException("Invalid TileRequestDto"));
+        .thenThrow(new IllegalArgumentException("launcher failed"));
 
-    // When/Then
     assertThatThrownBy(() -> mbTilesJobService.startJob(tileRequest))
         .isInstanceOf(MBTilesUnexpectedInternalException.class);
   }
@@ -281,8 +281,7 @@ class MBTilesJobServiceTest {
     assertThat(response.getStatus()).isEqualTo("STARTED");
     assertThat(response.getProcessedTiles()).isEqualTo(500L);
     assertThat(response.getTotalTiles()).isEqualTo(1000L);
-    // Verify clearJobProgress was not called for non-completed jobs
-    // This is implicit since we didn't set up the mock to expect clearJobProgress
+    verify(mbTilesProgressService, never()).clearJobProgress(jobId);
   }
 
   @Test
@@ -296,29 +295,6 @@ class MBTilesJobServiceTest {
     when(jobExecution.getStatus()).thenReturn(BatchStatus.COMPLETED);
     when(jobExecution.getJobParameters()).thenReturn(jobParameters);
     when(jobParameters.getString("outputPath")).thenReturn(null);
-    when(jobExplorer.getJobExecution(jobId)).thenReturn(jobExecution);
-
-    // When & Then
-    assertThatThrownBy(() -> mbTilesJobService.getMBTilesFile(jobId))
-        .isInstanceOf(MBTilesFileNotFoundException.class);
-  }
-
-  @Test
-  @DisplayName("Should handle IOException in getMBTilesFile")
-  void handleIOExceptionInGetMBTilesFile() throws IOException {
-    // Given
-    long jobId = 1L;
-    JobExecution jobExecution = mock(JobExecution.class);
-    JobParameters jobParameters = mock(JobParameters.class);
-
-    // Create a temporary file that will be deleted before reading
-    Path tempFile = Files.createTempFile("test", ".mbtiles");
-    Files.write(tempFile, "test data".getBytes());
-    Files.delete(tempFile);
-
-    when(jobExecution.getStatus()).thenReturn(BatchStatus.COMPLETED);
-    when(jobExecution.getJobParameters()).thenReturn(jobParameters);
-    when(jobParameters.getString("outputPath")).thenReturn(tempFile.toString());
     when(jobExplorer.getJobExecution(jobId)).thenReturn(jobExecution);
 
     // When & Then

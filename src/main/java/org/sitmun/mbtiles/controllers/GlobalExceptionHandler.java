@@ -24,10 +24,8 @@ public class GlobalExceptionHandler {
 
   private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-  // Common URN prefix for sitmun-mbtiles problems
   private static final String URN_PREFIX = "urn:sitmun-mbtiles:problem:";
 
-  // Problem type URIs following RFC 7807
   private static final URI VALIDATION_ERROR_TYPE = URI.create(URN_PREFIX + "validation-error");
   private static final URI INVALID_REQUEST_TYPE = URI.create(URN_PREFIX + "invalid-request");
   private static final URI RESOURCE_NOT_FOUND_TYPE = URI.create(URN_PREFIX + "resource-not-found");
@@ -57,7 +55,6 @@ public class GlobalExceptionHandler {
     return ResponseEntity.badRequest().body(problemDetail);
   }
 
-  /** Handles unexpected request exceptions. */
   @ExceptionHandler(MBTilesUnexpectedRequestException.class)
   public ResponseEntity<ProblemDetail> handleUnexpectedRequestException(
       MBTilesUnexpectedRequestException e) {
@@ -73,7 +70,6 @@ public class GlobalExceptionHandler {
     return ResponseEntity.badRequest().body(problemDetail);
   }
 
-  /** Handles file not found exceptions. */
   @ExceptionHandler(MBTilesFileNotFoundException.class)
   public ResponseEntity<ProblemDetail> handleFileNotFoundException(MBTilesFileNotFoundException e) {
     logger.warn("Resource not found error: {}", e.getMessage());
@@ -88,7 +84,6 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
   }
 
-  /** Handles internal server errors. */
   @ExceptionHandler(MBTilesUnexpectedInternalException.class)
   public ResponseEntity<ProblemDetail> handleInternalException(
       MBTilesUnexpectedInternalException e) {
@@ -103,7 +98,6 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problemDetail);
   }
 
-  /** Handles all other unexpected exceptions. */
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ProblemDetail> handleGenericException(Exception e) {
     logger.error("Unexpected error: {}", e.getMessage(), e);

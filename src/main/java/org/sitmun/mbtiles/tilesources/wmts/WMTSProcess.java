@@ -185,7 +185,6 @@ public class WMTSProcess implements MBTilesTaskStrategy, MBTilesEstimateStrategy
         WMTSLayerCapabilities layerCapabilities = entry.getKey();
         List<WMTSTileCoordinate> coordinates = entry.getValue();
         for (WMTSTileCoordinate coordinate : coordinates) {
-          // Check if the job has been stopped by checking the step execution status
           if (stepContext.getStepExecution().getStatus().isUnsuccessful()
               || stepContext.getStepExecution().getJobExecution().getStatus().isUnsuccessful()) {
             log.info("Job {} has been stopped, exiting tile processing", jobId);
@@ -200,11 +199,9 @@ public class WMTSProcess implements MBTilesTaskStrategy, MBTilesEstimateStrategy
           }
           processedTiles++;
 
-          // Check for stop signals more frequently (every 10 tiles instead of 50)
           if (processedTiles % 10 == 0) {
             mbTilesProgressService.updateJobProgress(jobId, totalTiles, processedTiles);
 
-            // Additional check for stop signals
             if (stepContext.getStepExecution().getStatus().isUnsuccessful()
                 || stepContext.getStepExecution().getJobExecution().getStatus().isUnsuccessful()) {
               log.info(

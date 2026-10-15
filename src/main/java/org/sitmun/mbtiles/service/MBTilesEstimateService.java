@@ -74,27 +74,22 @@ public class MBTilesEstimateService {
 
   private MBTilesEstimateDto sumMBTilesEstimations(
       MBTilesEstimateDto total, @NotNull MBTilesEstimateDto newSize) {
-    // Store old values before updating tile count
     int oldTotalTileCount = total.getTileCount();
     double oldEstimatedTileSizeKb = total.getEstimatedTileSizeKb();
     double oldTotalWeightedSize = oldEstimatedTileSizeKb * oldTotalTileCount;
 
-    // Update tile count first
     int newTotalTileCount = oldTotalTileCount + newSize.getTileCount();
     total = total.withTileCount(newTotalTileCount);
 
-    // Calculate weighted average tile size only if we have tiles
     if (newTotalTileCount > 0) {
       double totalWeightedSize =
           oldTotalWeightedSize + newSize.getEstimatedTileSizeKb() * newSize.getTileCount();
       double newEstimateTileSize = totalWeightedSize / newTotalTileCount;
       total = total.withEstimatedTileSizeKb(newEstimateTileSize);
     } else {
-      // If no tiles, set tile size to 0
       total = total.withEstimatedTileSizeKb(0.0);
     }
 
-    // Sum the MBTiles size (maintain original behavior)
     total =
         total.withEstimatedMbtilesSizeMb(
             total.getEstimatedMbtilesSizeMb() + newSize.getEstimatedMbtilesSizeMb());

@@ -82,9 +82,6 @@ public class MBTilesJobService {
 
     BatchStatus batchStatus = jobExecution.getStatus();
     String status = batchStatus.toString();
-    if (BatchStatus.FAILED.equals(batchStatus)) {
-      status = "FAILED";
-    }
 
     try {
       if (BatchStatus.COMPLETED.equals(batchStatus) || BatchStatus.FAILED.equals(batchStatus)) {

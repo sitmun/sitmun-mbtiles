@@ -125,7 +125,7 @@ This service integrates with the [SITMUN Backend Core](https://github.com/sitmun
 ### Building
 
 ```bash
-# Build the project (includes Git hooks setup)
+# Build the project
 ./gradlew build
 
 # Build without tests (faster for development)
@@ -909,7 +909,7 @@ git commit -m "style: format code with Google Java Format"
 #### Managing Git Hooks
 
 ```bash
-# Install Git hooks (automatic with build)
+# Install Git hooks (opt-in)
 ./gradlew setupGitHooks
 
 # Remove Git hooks

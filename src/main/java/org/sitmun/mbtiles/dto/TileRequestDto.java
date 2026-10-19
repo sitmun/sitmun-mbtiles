@@ -7,10 +7,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.*;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 @Value
 @Builder
 @With
+@JsonDeserialize(builder = TileRequestDto.TileRequestDtoBuilder.class)
 public class TileRequestDto {
   @NotNull(message = "Map services list cannot be null")
   @Size(min = 1, message = "At least one map service must be provided")
@@ -35,4 +38,7 @@ public class TileRequestDto {
   public boolean isZoomLevelsValid() {
     return minZoom <= maxZoom;
   }
+
+  @JsonPOJOBuilder(withPrefix = "")
+  public static class TileRequestDtoBuilder {}
 }

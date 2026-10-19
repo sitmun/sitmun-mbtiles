@@ -6,10 +6,13 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Value;
 import lombok.With;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 @Value
 @Builder
 @With
+@JsonDeserialize(builder = BoundingBoxDto.BoundingBoxDtoBuilder.class)
 public class BoundingBoxDto {
   double minY;
   double minX;
@@ -43,4 +46,7 @@ public class BoundingBoxDto {
   public double[] toBounds() {
     return new double[] {minX, minY, maxX, maxY};
   }
+
+  @JsonPOJOBuilder(withPrefix = "")
+  public static class BoundingBoxDtoBuilder {}
 }

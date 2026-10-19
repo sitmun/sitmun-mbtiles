@@ -1,24 +1,23 @@
 package org.sitmun.mbtiles.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.sitmun.mbtiles.dto.MBTilesJobStatusDto;
 import org.sitmun.mbtiles.dto.MBTilesProgressDto;
 import org.sitmun.mbtiles.dto.ResourceDto;
 import org.sitmun.mbtiles.dto.TileRequestDto;
 import org.springframework.batch.core.BatchStatus;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameter;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.explore.JobExplorer;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.JobExecution;
+import org.springframework.batch.core.job.parameters.JobParameter;
+import org.springframework.batch.core.job.parameters.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.explore.JobExplorer;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 @Slf4j
@@ -44,7 +43,7 @@ public class MBTilesJobService {
   }
 
   public Long startJob(TileRequestDto tileRequest) {
-    Map<String, JobParameter<?>> params = new HashMap<>();
+    JobParameters params;
     try {
       log.info(
           "Starting MBTiles job with JobLauncher: {}", batchJobLauncher.getClass().getSimpleName());
@@ -53,19 +52,22 @@ public class MBTilesJobService {
       Path tempFile = temporaryFileService.createUniqueTempFile("mbtiles");
       String outputPath = tempFile.toAbsolutePath().toString();
 
-      params.put("outputPath", new JobParameter<>(outputPath, String.class));
-      params.put(
-          "tileRequest",
-          new JobParameter<>(new ObjectMapper().writeValueAsString(tileRequest), String.class));
-      params.put("timestamp", new JobParameter<>(System.currentTimeMillis(), Long.class));
-
+      params =
+          new JobParameters(
+              Set.of(
+                  new JobParameter<>("outputPath", outputPath, String.class),
+                  new JobParameter<>(
+                      "tileRequest",
+                      new ObjectMapper().writeValueAsString(tileRequest),
+                      String.class),
+                  new JobParameter<>("timestamp", System.currentTimeMillis(), Long.class)));
     } catch (Exception e) {
       log.error("Error starting MBTiles job", e);
       throw new MBTilesUnexpectedInternalException(e);
     }
     try {
       log.info("About to launch job with parameters: {}", params);
-      JobExecution jobExecution = batchJobLauncher.run(mbTilesJob, new JobParameters(params));
+      JobExecution jobExecution = batchJobLauncher.run(mbTilesJob, params);
       log.info("Job launched with ID: {}", jobExecution.getId());
       return jobExecution.getId();
     } catch (Exception e) {

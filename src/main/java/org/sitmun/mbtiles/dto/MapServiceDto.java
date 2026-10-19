@@ -2,18 +2,21 @@ package org.sitmun.mbtiles.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.*;
-import org.hibernate.validator.constraints.URL;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 @Value
 @Builder
 @With
+@JsonDeserialize(builder = MapServiceDto.MapServiceDtoBuilder.class)
 public class MapServiceDto {
 
   @NotNull(message = "Service URL cannot be null")
-  @URL(regexp = "^(https?://).*", message = "Service URL must be a valid HTTP/HTTPS URL")
+  @Pattern(regexp = "^(https?://).*", message = "Service URL must be a valid HTTP/HTTPS URL")
   String url;
 
   @NotNull(message = "Layers list cannot be null")
@@ -23,4 +26,7 @@ public class MapServiceDto {
 
   @NotNull(message = "Service type cannot be null")
   String type;
+
+  @JsonPOJOBuilder(withPrefix = "")
+  public static class MapServiceDtoBuilder {}
 }

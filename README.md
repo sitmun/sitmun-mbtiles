@@ -434,7 +434,7 @@ mbtiles:
 ### Technology Stack
 
 - **Java**: 17
-- **Spring Boot**: 3.5.4
+- **Spring Boot**: 4.1.1
 - **Spring Batch**: 5.2.2 (for job processing)
 - **Build Tool**: Gradle 8.14.6 with Version Catalogs
 - **Database**: H2 (in-memory) for Spring Batch metadata

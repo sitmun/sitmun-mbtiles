@@ -1,6 +1,5 @@
 package org.sitmun.mbtiles.batch;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -8,9 +7,10 @@ import org.sitmun.mbtiles.dto.MapServiceDto;
 import org.sitmun.mbtiles.dto.TileRequestDto;
 import org.sitmun.mbtiles.dto.TileServiceDto;
 import org.sitmun.mbtiles.tilesources.wmts.WMTSConstants;
-import org.springframework.batch.core.JobExecutionException;
+import org.springframework.batch.core.job.JobExecutionException;
 import org.springframework.batch.core.scope.context.StepContext;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 @Slf4j
 @Component

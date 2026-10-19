@@ -10,7 +10,7 @@ import org.sitmun.mbtiles.dto.MapServiceDto;
 import org.sitmun.mbtiles.dto.TileRequestDto;
 import org.sitmun.mbtiles.dto.TileServiceDto;
 import org.sitmun.mbtiles.tilesources.wmts.WMTSConstants;
-import org.springframework.batch.core.JobExecutionException;
+import org.springframework.batch.core.job.JobExecutionException;
 import org.springframework.stereotype.Service;
 
 @Service

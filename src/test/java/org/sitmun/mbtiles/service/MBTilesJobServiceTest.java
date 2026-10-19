@@ -27,11 +27,11 @@ import org.sitmun.mbtiles.dto.MapServiceDto;
 import org.sitmun.mbtiles.dto.ResourceDto;
 import org.sitmun.mbtiles.dto.TileRequestDto;
 import org.springframework.batch.core.BatchStatus;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.explore.JobExplorer;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.JobExecution;
+import org.springframework.batch.core.job.parameters.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.explore.JobExplorer;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("MBTilesJobService Tests")
@@ -57,8 +57,8 @@ class MBTilesJobServiceTest {
   void startJobSuccessfully() throws Exception {
     // Given
     TileRequestDto tileRequest = createSampleTileRequest();
-    JobExecution jobExecution = new JobExecution(1L);
-    jobExecution.setStatus(BatchStatus.STARTED);
+    JobExecution jobExecution = mock(JobExecution.class);
+    when(jobExecution.getId()).thenReturn(1L);
 
     Path mockTempFile = Path.of("/tmp/test-file.mbtiles");
     when(temporaryFileService.createUniqueTempFile("mbtiles")).thenReturn(mockTempFile);

@@ -125,7 +125,7 @@ This service integrates with the [SITMUN Backend Core](https://github.com/sitmun
 ### Building
 
 ```bash
-# Build the project (includes Git hooks setup)
+# Build the project
 ./gradlew build
 
 # Build without tests (faster for development)
@@ -436,7 +436,7 @@ mbtiles:
 - **Java**: 17
 - **Spring Boot**: 3.5.4
 - **Spring Batch**: 5.2.2 (for job processing)
-- **Build Tool**: Gradle with Version Catalogs
+- **Build Tool**: Gradle 8.14.6 with Version Catalogs
 - **Database**: H2 (in-memory) for Spring Batch metadata
 - **MBTiles Support**: mbtiles4j 1.2.0
 - **Coordinate Transformations**: proj4j 1.1.5
@@ -909,7 +909,7 @@ git commit -m "style: format code with Google Java Format"
 #### Managing Git Hooks
 
 ```bash
-# Install Git hooks (automatic with build)
+# Install Git hooks (opt-in)
 ./gradlew setupGitHooks
 
 # Remove Git hooks

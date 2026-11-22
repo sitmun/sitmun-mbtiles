@@ -1,3 +1,5 @@
+> **Archived.** This branch holds the code up to its import into SITMUN 1.3.0, so it also contains fixes first released in 1.3.0. Since 1.3.0 it is maintained in [sitmun/sitmun](https://github.com/sitmun/sitmun), folder [`sitmun-addons/sitmun-mbtiles`](https://github.com/sitmun/sitmun/tree/main/sitmun-addons/sitmun-mbtiles), which imported this repository's history. This repository is read-only and receives no further changes; the instructions below describe the archived code. Documentation: [https://sitmun.github.io](https://sitmun.github.io).
+
 # SITMUN MBTiles Service
 
 A Spring Boot microservice for generating MBTiles (MapBox Tiles) from WMTS map services. This service is part of the [SITMUN](https://sitmun.github.io/) geospatial platform ecosystem.
